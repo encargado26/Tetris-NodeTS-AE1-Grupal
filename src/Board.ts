@@ -1,4 +1,14 @@
-export class Cell {}
+export class Cell {
+    clear() {
+        throw new Error('Method not implemented.');
+    }
+    occupy() {
+        throw new Error('Method not implemented.');
+    }
+    occupied(occupied: any) {
+        throw new Error('Method not implemented.');
+    }
+}
 
 export class Board {
     public width: number;
