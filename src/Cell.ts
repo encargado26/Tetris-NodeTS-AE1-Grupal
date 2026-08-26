@@ -1,4 +1,4 @@
-export class cell {
+export class Cell {
     public occupied: boolean;
 
     constructor() {
