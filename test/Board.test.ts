@@ -46,7 +46,7 @@ describe("_Board", () => {
 
   test("el setter de largo no cambia si el valor es inválido", () => {
     const tablero = new _Board(5, 8);
-    tablero.largo = 0; // debería ignorar
+    tablero.largo = 0; // debería ignorar (cubre línea 38)
     expect(tablero.largo).toBe(8);
   });
 
