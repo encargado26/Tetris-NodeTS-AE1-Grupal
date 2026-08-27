@@ -1,4 +1,3 @@
-// tests/_PiezaT.test.ts
 import { describe, expect, test } from "vitest";
 import { _PiezaT } from "../src/PieceT";
 

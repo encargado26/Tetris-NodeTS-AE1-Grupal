@@ -1,4 +1,3 @@
-// src/_PiezaT.ts
 import { _PiezaBase } from "./PieceBase";
 
 export class _PiezaT extends _PiezaBase {
