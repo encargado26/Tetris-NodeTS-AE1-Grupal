@@ -1,15 +1,25 @@
-export class Cell {
-    public occupied: boolean;
+export class _Cell {
+  private _ocupado: boolean;
 
-    constructor() {
-        this.occupied = false;
-    }
+  constructor() {
+    this._ocupado = false; // por defecto la celda está vacía
+  }
 
-    occupy(): void {
-        this.occupied = true;
-    }
+  // Getter y setter
+  get ocupado(): boolean {
+    return this._ocupado;
+  }
 
-    clear(): void {
-        this.occupied = false;
-    }
+  set ocupado(valor: boolean) {
+    this._ocupado = valor;
+  }
+
+  // Métodos
+  ocupar(): void {
+    this._ocupado = true;
+  }
+
+  liberar(): void {
+    this._ocupado = false;
+  }
 }

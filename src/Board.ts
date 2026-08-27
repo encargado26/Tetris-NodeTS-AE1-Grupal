@@ -1,14 +1,45 @@
-import { Cell } from './Cell';
+import { _Cell } from './Cell';
 
-export class Board {
-    public width: number;
-    public height: number; 
-    public cells: Cell[][]; 
+export class _Board {
+  private _ancho: number;
+  private _largo: number;
+  private _celdas: _Cell[][];
 
-    constructor(width: number, height: number) {
-        this.width = width;
-        this.height = height;
-        this.cells = Array.from({ length: height }, () => Array.from({ length: width }, () => new Cell())); 
-        
+  constructor(ancho: number, largo: number) {
+    this._ancho = ancho;
+    this._largo = largo;
+    this._celdas = Array.from({ length: largo }, () =>
+      Array.from({ length: ancho }, () => new _Cell())
+    );
+  }
+
+  // Getters y setters adecuados para ancho, largo y celdas
+  get ancho(): number {
+    return this._ancho;
+  }
+
+  set ancho(valor: number) {
+    if (valor > 0) {
+      this._ancho = valor;
     }
+  }
+
+  get largo(): number {
+    return this._largo;
+  }
+
+  set largo(valor: number) {
+    if (valor > 0) {
+      this._largo = valor;
+    }
+  }
+
+  get celdas(): _Cell[][] {
+    return this._celdas;
+  }
+
+  // Con esto accedemos a una celda específica del tablero usando coordenadas (x, y)
+  obtenerCelda(x: number, y: number): _Cell {
+    return this._celdas[y][x];
+  }
 }

@@ -1,32 +1,58 @@
-import {IRotator} from "./IRotator";
+import { IRotator } from "./IRotator";
 
-export abstract class PieceBase implements IRotator {
-    public x: number;
-    public y: number;
-    public shape: number[][];
+export abstract class _PiezaBase implements IRotator {
+  private _posX: number;
+  private _posY: number;
+  private _forma: number[][];
 
-    constructor(shape: number[][], x: number = 0, y: number = 0) {
-        this.shape = shape;
-        this.x = x;
-        this.y = y
-    }
-
-    moveLeft(): void {
-    this.x -= 1;
+  constructor(forma: number[][], posX: number = 0, posY: number = 0) {
+    this._forma = forma;
+    this._posX = posX;
+    this._posY = posY;
   }
 
-  moveRight(): void {
-    this.x += 1;
+  // Getters y setters
+  get posX(): number {
+    return this._posX;
   }
 
-  moveDown(): void {
-    this.y += 1;
+  set posX(valor: number) {
+    this._posX = valor;
   }
 
+  get posY(): number {
+    return this._posY;
+  }
+
+  set posY(valor: number) {
+    this._posY = valor;
+  }
+
+  get forma(): number[][] {
+    return this._forma;
+  }
+
+  set forma(valor: number[][]) {
+    this._forma = valor;
+  }
+
+  // Métodos de movimiento
+  moverIzquierda(): void {
+    this._posX -= 1;
+  }
+
+  moverDerecha(): void {
+    this._posX += 1;
+  }
+
+  moverAbajo(): void {
+    this._posY += 1;
+  }
+
+  // Rotación 90° en sentido horario
   rotate(): void {
-    // rotación 90° en sentido horario
-    this.shape = this.shape[0].map((_, i) =>
-      this.shape.map(row => row[i]).reverse()
+    this._forma = this._forma[0].map((_, i) =>
+      this._forma.map(fila => fila[i]).reverse()
     );
   }
 }
