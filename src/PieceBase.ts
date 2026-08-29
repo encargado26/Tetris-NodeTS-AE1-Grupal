@@ -1,5 +1,4 @@
 import { IRotator } from "./IRotator";
-
 export abstract class _PiezaBase implements IRotator {
   private _posX: number;
   private _posY: number;
