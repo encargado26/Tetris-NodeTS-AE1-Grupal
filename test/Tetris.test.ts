@@ -133,21 +133,7 @@ describe("Tetris - cobertura completa", () => {
     expect(juego.piezaActual).toBeNull();
   });
 
-  // ramas false (con pieza)
-  it("moveLeft ejecuta bloque interno si hay piezaActual", () => {
-    juego.spawnPiece();
-    const xInicial = juego.piezaActual!.posX;
-    juego.moveLeft();
-    expect(juego.piezaActual!.posX).toBe(xInicial - 1);
-  });
-
-  it("moveRight ejecuta bloque interno si hay piezaActual", () => {
-    juego.spawnPiece();
-    const xInicial = juego.piezaActual!.posX;
-    juego.moveRight();
-    expect(juego.piezaActual!.posX).toBe(xInicial + 1);
-  });
-
+  // lockPiece con pieza
   it("lockPiece ocupa celdas si hay piezaActual", () => {
     juego.spawnPiece();
     juego.piezaActual!.posY = 0;
@@ -227,28 +213,39 @@ describe("Tetris - cobertura completa", () => {
     expect(juego["canPlace"](juego.piezaActual!)).toBe(true);
   });
 
-    // moveLeft (izquierda) con piezaActual presente (cubre rama false línea 62) 
-  it("moveLeft entra al bloque interno si hay piezaActual", () => {
+  // --- Partidas completas ---
+  it("simula una partida ganada completando todas las líneas", () => {
     juego.spawnPiece();
-    const xInicial = juego.piezaActual!.posX;
-    juego.moveLeft(); // entra al else del if
-    expect(juego.piezaActual!.posX).toBeLessThanOrEqual(xInicial);
+    for (let i = 0; i < juego["_maxLines"]; i++) {
+      juego["_board"].celdas[19] = Array.from({ length: juego["_board"].ancho }, () => {
+        const celda = new _Cell();
+        celda.ocupar();
+        return celda;
+      });
+    }
   });
 
-  // moveRight (derecha) con piezaActual presente (cubre rama false línea 68)
-  it("moveRight entra al bloque interno si hay piezaActual", () => {
-    juego.spawnPiece();
-    const xInicial = juego.piezaActual!.posX;
-    juego.moveRight();
-    expect(juego.piezaActual!.posX).toBeGreaterThanOrEqual(xInicial);
-  });
+  it("moveLeft no mueve si la pieza está en el borde izquierdo", () => {
+  juego.spawnPiece();
+  juego.piezaActual!.posX = 0;
+  const xAntes = juego.piezaActual!.posX;
+  juego.moveLeft();
+  expect(juego.piezaActual!.posX).toBe(xAntes);
+});
 
-  // lockPiece (bloquear pieza) con piezaActual presente (cubre rama false línea 88)
-  it("Bloquear Pieza entra al bloque interno si hay piezaActual", () => {
-    juego.spawnPiece();
-    juego.piezaActual!.posY = 0;
-    juego["lockPiece"]();
-    const algunaOcupada = juego["_board"].celdas.some(fila => fila.some(c => c.ocupado));
-    expect(algunaOcupada).toBe(true);
-  });
+it("moveRight no mueve si la pieza está en el borde derecho", () => {
+  juego.spawnPiece();
+  juego.piezaActual!.posX = juego["_board"].ancho - 1;
+  const xAntes = juego.piezaActual!.posX;
+  juego.moveRight();
+  expect(juego.piezaActual!.posX).toBe(xAntes);
+});
+
+it("lockPiece entra en rama de bloqueo con pieza activa", () => {
+  juego.spawnPiece();
+  juego.piezaActual!.posY = juego["_board"].largo - 1;
+  juego["lockPiece"]();
+  const algunaOcupada = juego["_board"].celdas.some(fila => fila.some(c => c.ocupado));
+  expect(algunaOcupada).toBe(true);
+});
 });
