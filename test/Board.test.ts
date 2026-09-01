@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import { _Board } from "../src/Board";
 
 describe("_Board", () => {
+  
   test("el tablero se crea con celdas vacías", () => {
     const tablero = new _Board(10, 20);
 

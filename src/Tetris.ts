@@ -1,5 +1,5 @@
 import { _Board } from "./Board";
-import { _Clock } from "./Clock";
+import { _Reloj } from "./Clock";
 import { _Cell } from "./Cell";
 import { _PiezaBase } from "./PieceBase";
 import { _PiezaT } from "./PieceT";
@@ -10,7 +10,7 @@ import { _PiezaDog } from "./PieceDog";
 
 export class Tetris {
   private _board: _Board;
-  private _clock: _Clock;
+  private _clock: _Reloj;
   private _piezaActual: _PiezaBase | null;
   private _gameOver: boolean;
   private _completedLines: number;
@@ -18,7 +18,7 @@ export class Tetris {
 
   constructor(ancho: number = 10, largo: number = 20, maxLines: number = 5) {
     this._board = new _Board(ancho, largo);
-    this._clock = new _Clock();
+    this._clock = new _Reloj();
     this._piezaActual = null;
     this._gameOver = false;
     this._completedLines = 0;
@@ -40,11 +40,11 @@ export class Tetris {
     const posX = Math.floor(this._board.ancho / 2);
     this._piezaActual = new piezaClass(posX, 0);
 
-    // si no cabe en la primera fila → game over
+    // si no cabe en la primera fila → perdiste
     if (!this.canPlace(this._piezaActual)) this._gameOver = true;
   }
 
-  // Tick del reloj → bajar pieza
+  // Tick del reloj → bajar pieza 
   tick(): void {
     if (this._gameOver) return; 
 
@@ -55,7 +55,7 @@ export class Tetris {
     }
   }
 
-  // Movimiento lateral
+  // Movimiento lateral (izquierda/derecha)
   moveLeft(): void {
     if (!this._piezaActual) return; 
     this._piezaActual.moverIzquierda();
@@ -78,7 +78,7 @@ export class Tetris {
 
   // Bloquear pieza en el tablero
   private lockPiece(): void {
-    if (!this._piezaActual) return; // if 1
+    if (!this._piezaActual) return;
 
     this._piezaActual.forma.forEach((fila, y) =>
       fila.forEach((valor, x) => {

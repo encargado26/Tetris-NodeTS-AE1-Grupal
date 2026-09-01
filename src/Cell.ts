@@ -2,10 +2,9 @@ export class _Cell {
   private _ocupado: boolean;
 
   constructor() {
-    this._ocupado = false; // por defecto la celda está vacía
+    this._ocupado = false; 
   }
 
-  // Getter y setter
   get ocupado(): boolean {
     return this._ocupado;
   }

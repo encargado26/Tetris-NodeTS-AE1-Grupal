@@ -9,7 +9,7 @@ describe("Tetris - cobertura completa", () => {
     juego = new Tetris(10, 20, 5);
   });
 
-  // --- spawnPiece ---
+  // spawnPiece 
   it("spawnPiece debe crear una pieza en la primera fila", () => {
     juego.spawnPiece();
     expect(juego.piezaActual).not.toBeNull();
@@ -26,7 +26,7 @@ describe("Tetris - cobertura completa", () => {
     expect(juego.gameOver).toBe(true);
   });
 
-  // --- tick ---
+  // tick 
   it("tick debe bajar la pieza una posición", () => {
     juego.spawnPiece();
     const yInicial = juego.piezaActual!.posY;
@@ -78,7 +78,7 @@ describe("Tetris - cobertura completa", () => {
     expect(juego.piezaActual).not.toBeNull();
   });
 
-  // --- movimientos ---
+  // movimientos
   it("moveLeft debe mover la pieza a la izquierda", () => {
     juego.spawnPiece();
     const xInicial = juego.piezaActual!.posX;
@@ -114,7 +114,7 @@ describe("Tetris - cobertura completa", () => {
     expect(JSON.stringify(juego.piezaActual!.forma)).toBe(formaInicial);
   });
 
-  // --- ramas true (sin pieza) ---
+  // ramas true (sin pieza)
   it("moveLeft no rompe si no hay piezaActual", () => {
     expect(() => juego.moveLeft()).not.toThrow();
   });
@@ -133,7 +133,7 @@ describe("Tetris - cobertura completa", () => {
     expect(juego.piezaActual).toBeNull();
   });
 
-  // --- ramas false (con pieza) ---
+  // ramas false (con pieza)
   it("moveLeft ejecuta bloque interno si hay piezaActual", () => {
     juego.spawnPiece();
     const xInicial = juego.piezaActual!.posX;
@@ -156,7 +156,7 @@ describe("Tetris - cobertura completa", () => {
     expect(algunaOcupada).toBe(true);
   });
 
-  // --- handleLock ---
+  // bloquea pieza, limpia líneas y genera nueva
   it("handleLock bloquea pieza, limpia líneas y genera nueva", () => {
     juego.spawnPiece();
     juego.piezaActual!.posY = juego["_board"].largo - 2;
@@ -164,7 +164,7 @@ describe("Tetris - cobertura completa", () => {
     expect(juego.piezaActual).not.toBeNull();
   });
 
-  // --- clearLines ---
+  // Eliminar líneas
   it("clearLines debe eliminar una fila completa", () => {
     juego["_board"].celdas[19] = Array.from({ length: juego["_board"].ancho }, () => {
       const celda = new _Cell();
@@ -189,14 +189,14 @@ describe("Tetris - cobertura completa", () => {
     expect(juego["_completedLines"]).toBe(2);
   });
 
-  // --- checkGameOver ---
+  // verificar GameOver 
   it("checkGameOver debe terminar el juego al alcanzar maxLines", () => {
     juego["_completedLines"] = 5;
     juego["checkGameOver"]();
     expect(juego.gameOver).toBe(true);
   });
 
-  // --- canPlace ---
+  // canPlace
   it("canPlace devuelve false si la pieza está fuera del tablero", () => {
     juego.spawnPiece();
     juego.piezaActual!.posX = -5;
@@ -227,7 +227,7 @@ describe("Tetris - cobertura completa", () => {
     expect(juego["canPlace"](juego.piezaActual!)).toBe(true);
   });
 
-    // --- moveLeft con piezaActual presente (cubre rama false línea 62) ---
+    // moveLeft (izquierda) con piezaActual presente (cubre rama false línea 62) 
   it("moveLeft entra al bloque interno si hay piezaActual", () => {
     juego.spawnPiece();
     const xInicial = juego.piezaActual!.posX;
@@ -235,19 +235,19 @@ describe("Tetris - cobertura completa", () => {
     expect(juego.piezaActual!.posX).toBeLessThanOrEqual(xInicial);
   });
 
-  // --- moveRight con piezaActual presente (cubre rama false línea 68) ---
+  // moveRight (derecha) con piezaActual presente (cubre rama false línea 68)
   it("moveRight entra al bloque interno si hay piezaActual", () => {
     juego.spawnPiece();
     const xInicial = juego.piezaActual!.posX;
-    juego.moveRight(); // entra al else del if
+    juego.moveRight();
     expect(juego.piezaActual!.posX).toBeGreaterThanOrEqual(xInicial);
   });
 
-  // --- lockPiece con piezaActual presente (cubre rama false línea 88) ---
-  it("lockPiece entra al bloque interno si hay piezaActual", () => {
+  // lockPiece (bloquear pieza) con piezaActual presente (cubre rama false línea 88)
+  it("Bloquear Pieza entra al bloque interno si hay piezaActual", () => {
     juego.spawnPiece();
     juego.piezaActual!.posY = 0;
-    juego["lockPiece"](); // entra al else del if
+    juego["lockPiece"]();
     const algunaOcupada = juego["_board"].celdas.some(fila => fila.some(c => c.ocupado));
     expect(algunaOcupada).toBe(true);
   });

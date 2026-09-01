@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import { _PiezaT } from "../src/PieceT";
 
 describe("_PiezaT", () => {
+  
   test("se crea con posición inicial y forma T", () => {
     const pieza = new _PiezaT();
     expect(pieza.posX).toBe(0);

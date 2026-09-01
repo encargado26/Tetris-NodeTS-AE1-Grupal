@@ -1,30 +1,29 @@
 import { describe, expect, test } from "vitest";
-import { _Clock } from "../src/Clock";
+import { _Reloj } from "../src/Clock";
 
-describe("_Clock", () => {
+describe("_Reloj", () => {
 
   test("se crea con cero ticks", () => {
-    const clock = new _Clock();
+    const reloj = new _Reloj();
 
-    expect(clock.ticks).toBe(0);
+    expect(reloj.ticks).toBe(0);
   });
 
   test("tick aumenta el contador en uno", () => {
-    const clock = new _Clock();
+    const reloj = new _Reloj();
 
-    clock.tick();
+    reloj.tick();
 
-    expect(clock.ticks).toBe(1);
+    expect(reloj.ticks).toBe(1);
   });
 
   test("cada tick aumenta el contador en uno", () => {
-    const clock = new _Clock();
+    const reloj = new _Reloj();
 
-    clock.tick();
-    clock.tick();
-    clock.tick();
+    reloj.tick();
+    reloj.tick();
+    reloj.tick();
 
-    expect(clock.ticks).toBe(3);
+    expect(reloj.ticks).toBe(3);
   });
-
 });

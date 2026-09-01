@@ -1,6 +1,7 @@
 import { _PiezaBase } from "./PieceBase";
 
 export class _PiezaT extends _PiezaBase {
+  
   constructor(posX: number = 0, posY: number = 0) {
     super(
       [

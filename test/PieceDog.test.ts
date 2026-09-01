@@ -8,7 +8,6 @@ describe("_PiezaDog", () => {
 
     expect(pieza.posX).toBe(0);
     expect(pieza.posY).toBe(0);
-
     expect(pieza.forma).toEqual([
       [0, 1, 1],
       [1, 1, 0]
@@ -62,5 +61,4 @@ describe("_PiezaDog", () => {
       [0, 1]
     ]);
   });
-
 });

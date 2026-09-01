@@ -8,7 +8,6 @@ describe("_PiezaCuadrado", () => {
 
     expect(pieza.posX).toBe(0);
     expect(pieza.posY).toBe(0);
-
     expect(pieza.forma).toEqual([
       [1, 1],
       [1, 1]
@@ -61,5 +60,4 @@ describe("_PiezaCuadrado", () => {
       [1, 1]
     ]);
   });
-
 });

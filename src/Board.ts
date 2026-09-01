@@ -29,7 +29,7 @@ export class _Board {
     if (valor > 0) this._largo = valor;
   }
 
-  // ✅ fila primero (y), columna después (x)
+  // fila (y), columna (x)
   obtenerCelda(x: number, y: number): _Cell | undefined {
     if (y < 0 || y >= this._largo || x < 0 || x >= this._ancho) {
       return undefined;

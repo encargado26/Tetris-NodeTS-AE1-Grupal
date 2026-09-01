@@ -8,7 +8,6 @@ describe("_PiezaL", () => {
 
     expect(pieza.posX).toBe(0);
     expect(pieza.posY).toBe(0);
-
     expect(pieza.forma).toEqual([
       [1, 0],
       [1, 0],
@@ -62,5 +61,4 @@ describe("_PiezaL", () => {
       [1, 0, 0]
     ]);
   });
-
 });

@@ -10,7 +10,6 @@ export abstract class _PiezaBase implements IRotator {
     this._posY = posY;
   }
 
-  // Getters y setters
   get posX(): number {
     return this._posX;
   }
@@ -35,7 +34,7 @@ export abstract class _PiezaBase implements IRotator {
     this._forma = valor;
   }
 
-  // Métodos de movimiento
+  // Movimientos
   moverIzquierda(): void {
     this._posX -= 1;
   }

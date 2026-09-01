@@ -1,4 +1,4 @@
-export class _Clock {
+export class _Reloj {
 
   private _ticks: number;
 
