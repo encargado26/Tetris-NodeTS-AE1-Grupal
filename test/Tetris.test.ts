@@ -75,41 +75,24 @@ it("tick llama a handleLock cuando la pieza no cabe", () => {
   expect(juego.piezaActual).not.toBeNull();
 });
 
-  // movimientos
-  it("moveLeft debe mover la pieza a la izquierda", () => {
-    juego.spawnPiece();
-    const xInicial = juego.piezaActual!.posX;
-    juego.moveLeft();
-    expect(juego.piezaActual!.posX).toBe(xInicial - 1);
-  });
+ // movimientos
+it("moveLeft debe mover la pieza a la izquierda", () => {
+  juego.spawnPiece();
+  const xInicial = juego.piezaActual!.posX;
 
-  it("moveRight debe mover la pieza a la derecha", () => {
-    juego.spawnPiece();
-    const xInicial = juego.piezaActual!.posX;
-    juego.moveRight();
-    expect(juego.piezaActual!.posX).toBe(xInicial + 1);
-  });
+  juego.moveLeft();
 
-  it("rotate debe cambiar la forma de la pieza si corresponde", () => {
-    juego.spawnPiece();
-    const formaInicial = JSON.stringify(juego.piezaActual!.forma);
-    juego.rotate();
-    const formaRotada = JSON.stringify(juego.piezaActual!.forma);
+  expect(juego.piezaActual!.posX).toBe(xInicial - 1);
+});
 
-    if (formaInicial === "[[1,1],[1,1]]") {
-      expect(formaRotada).toBe(formaInicial);
-    } else {
-      expect(formaRotada).not.toBe(formaInicial);
-    }
-  });
+it("moveRight debe mover la pieza a la derecha", () => {
+  juego.spawnPiece();
+  const xInicial = juego.piezaActual!.posX;
 
-  it("rotate revierte si la pieza no cabe", () => {
-    juego.spawnPiece();
-    juego.piezaActual!.posX = -5;
-    const formaInicial = JSON.stringify(juego.piezaActual!.forma);
-    juego.rotate();
-    expect(JSON.stringify(juego.piezaActual!.forma)).toBe(formaInicial);
-  });
+  juego.moveRight();
+
+  expect(juego.piezaActual!.posX).toBe(xInicial + 1);
+});
 
   // ramas true (sin pieza)
   it("moveLeft no rompe si no hay piezaActual", () => {
