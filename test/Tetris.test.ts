@@ -187,7 +187,7 @@ it("handleLock genera una nueva pieza", () => {
 
   it("canPlace devuelve true si la pieza cabe en el tablero", () => {
     juego.spawnPiece();
-    expect(juego["canPlace"](juego.piezaActual!)).toBe(false);
+    expect(juego["canPlace"](juego.piezaActual!)).toBe(true);
   });
 
   // --- Partidas completas ---
