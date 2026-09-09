@@ -2,8 +2,8 @@
   "name": "tetris-nodets-ae1-grupal",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc",
-    "test": "vitest run --coverage"
+    "test": "vitest run --coverage",
+    "test:watch": "vitest watch"
   },
   "devDependencies": {
     "typescript": "^5.3.3",
