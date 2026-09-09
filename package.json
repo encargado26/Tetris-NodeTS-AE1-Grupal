@@ -2,7 +2,7 @@
   "name": "tetris-nodets-ae1-grupal",
   "version": "1.0.0",
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --coverage",
     "test:watch": "vitest watch"
   },
   "devDependencies": {
