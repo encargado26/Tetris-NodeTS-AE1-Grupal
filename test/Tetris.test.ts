@@ -108,13 +108,16 @@ it("rotate no falla sin pieza", () => {
 });
 
   // lockPiece con pieza
-  it("lockPiece ocupa celdas si hay piezaActual", () => {
-    juego.spawnPiece();
-    juego.piezaActual!.posY = 0;
-    juego["lockPiece"]();
-    const algunaOcupada = juego["_board"].celdas.some(fila => fila.some(c => c.ocupado));
-    expect(algunaOcupada).toBe(true);
-  });
+it("lockPiece ocupa celdas si hay piezaActual", () => {
+  juego.spawnPiece();
+  juego["lockPiece"]();
+
+  const algunaOcupada = juego["_board"].celdas.some(
+    fila => fila.some(celda => celda.ocupado)
+  );
+
+  expect(algunaOcupada).toBe(true);
+});
 
   // bloquea pieza, limpia líneas y genera nueva
   it("handleLock bloquea pieza, limpia líneas y genera nueva", () => {
