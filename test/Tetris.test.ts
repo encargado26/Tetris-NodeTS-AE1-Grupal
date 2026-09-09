@@ -120,12 +120,12 @@ it("lockPiece ocupa celdas si hay piezaActual", () => {
 });
 
   // bloquea pieza, limpia líneas y genera nueva
-  it("handleLock bloquea pieza, limpia líneas y genera nueva", () => {
-    juego.spawnPiece();
-    juego.piezaActual!.posY = juego["_board"].largo - 2;
-    juego["handleLock"]();
-    expect(juego.piezaActual).not.toBeNull();
-  });
+it("handleLock genera una nueva pieza", () => {
+  juego.spawnPiece();
+  juego["handleLock"]();
+
+  expect(juego.piezaActual).not.toBeNull();
+});
 
   // Eliminar líneas
   it("clearLines debe eliminar una fila completa", () => {
