@@ -20,7 +20,7 @@ describe("Tetris - cobertura completa", () => {
     expect(juego.piezaActual).not.toBeNull();
     expect(juego.piezaActual!.posY).toBe(0);
     const algunaOcupada = juego["_board"].celdas.some(fila => fila.some(c => c.ocupado));
-    expect(algunaOcupada).toBe(false);
+    expect(algunaOcupada).toBe(true);
   });
 
   it("spawnPiece debería terminar el juego si la primera fila está ocupada", () => {

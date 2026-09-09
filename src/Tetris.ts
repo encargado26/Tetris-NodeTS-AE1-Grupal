@@ -34,25 +34,73 @@ export class Tetris {
   }
 
   // Crear nueva pieza aleatoria en la primera fila
-  spawnPiece(): void {
-    const piezas = [_PiezaT, _PiezaL, _PiezaCuadrado, _PiezaStick, _PiezaDog];
-    const piezaClass = piezas[Math.floor(Math.random() * piezas.length)];
-    const posX = Math.floor(this._board.ancho / 2);
-    this._piezaActual = new piezaClass(posX, 0);
+spawnPiece(): void {
+  const piezas = [_PiezaT, _PiezaL, _PiezaCuadrado, _PiezaStick, _PiezaDog];
+  const piezaClass = piezas[Math.floor(Math.random() * piezas.length)];
+  const posX = Math.floor(this._board.ancho / 2);
+  this._piezaActual = new piezaClass(posX, 0);
 
-    // si no cabe en la primera fila → perdiste
-    if (!this.canPlace(this._piezaActual)) this._gameOver = true;
+  // si no cabe en la primera fila → perdiste
+  if (!this.canPlace(this._piezaActual)) {
+    this._gameOver = true;
+    return;
   }
 
-  // Tick del reloj → bajar pieza 
-  tick(): void {
-    if (this._gameOver) return; 
+  // ocupar las celdas del tablero según la forma de la pieza
+  this._piezaActual.forma.forEach((fila, y) => {
+    fila.forEach((valor, x) => {
+      if (valor === 1) {
+        const celda = this._board.obtenerCelda(this._piezaActual!.posX + x, this._piezaActual!.posY + y);
+        if (celda) {
+          celda.ocupar();
+        }
+      }
+    });
+  });
+}
 
-    this._clock.tick();
-    if (this._piezaActual) { 
-      this._piezaActual.moverAbajo();
-      !this.canPlace(this._piezaActual) && this.handleLock();
+tick(): void {
+  if (this._gameOver) return;
+
+  this._clock.tick();
+  if (this._piezaActual) {
+    this.clearPieceFromBoard(this._piezaActual);
+
+    this._piezaActual.moverAbajo();
+
+    if (!this.canPlace(this._piezaActual)) {
+      this._piezaActual.posY -= 1; // revertimos
+      this.handleLock();
+    } else {
+      this.placePieceOnBoard(this._piezaActual);
     }
+  }
+}
+
+  private clearPieceFromBoard(pieza: _PiezaBase): void {
+    pieza.forma.forEach((fila, y) => {
+      fila.forEach((valor, x) => {
+        if (valor !== 1) return;
+
+        const celda = this._board.obtenerCelda(pieza.posX + x, pieza.posY + y);
+        if (celda) {
+          celda.ocupado = false;
+        }
+      });
+    });
+  }
+
+  private placePieceOnBoard(pieza: _PiezaBase): void {
+    pieza.forma.forEach((fila, y) => {
+      fila.forEach((valor, x) => {
+        if (valor !== 1) return;
+
+        const celda = this._board.obtenerCelda(pieza.posX + x, pieza.posY + y);
+        if (celda) {
+          celda.ocupar();
+        }
+      });
+    });
   }
 
   // Movimiento lateral (izquierda/derecha)
