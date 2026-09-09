@@ -34,122 +34,92 @@ export class Tetris {
   }
 
   // Crear nueva pieza aleatoria en la primera fila
-spawnPiece(): void {
-  const piezas = [_PiezaT, _PiezaL, _PiezaCuadrado, _PiezaStick, _PiezaDog];
-  const piezaClass = piezas[Math.floor(Math.random() * piezas.length)];
-  const posX = Math.floor(this._board.ancho / 2);
-  this._piezaActual = new piezaClass(posX, 0);
-
-  // si no cabe en la primera fila → perdiste
-  if (!this.canPlace(this._piezaActual)) {
-    this._gameOver = true;
-    return;
-  }
-
-  // ocupar las celdas del tablero según la forma de la pieza
-  this._piezaActual.forma.forEach((fila, y) => {
-    fila.forEach((valor, x) => {
-      if (valor === 1) {
-        const celda = this._board.obtenerCelda(this._piezaActual!.posX + x, this._piezaActual!.posY + y);
-        if (celda) {
-          celda.ocupar();
-        }
-      }
-    });
-  });
-}
-
-tick(): void {
-  if (this._gameOver) return;
-
-  this._clock.tick();
-  if (this._piezaActual) {
-    this.clearPieceFromBoard(this._piezaActual);
-
-    this._piezaActual.moverAbajo();
+  spawnPiece(): void {
+    const piezas = [_PiezaT, _PiezaL, _PiezaCuadrado, _PiezaStick, _PiezaDog];
+    const piezaClass = piezas[Math.floor(Math.random() * piezas.length)];
+    const posX = Math.floor(this._board.ancho / 2);
+    this._piezaActual = new piezaClass(posX, 0);
 
     if (!this.canPlace(this._piezaActual)) {
-      this._piezaActual.posY -= 1; // revertimos
-      this.handleLock();
-    } else {
-      this.placePieceOnBoard(this._piezaActual);
+      this._gameOver = true;
+      return;
+    }
+
+    this.placePieceOnBoard(this._piezaActual);
+  }
+
+  // Tick del reloj → bajar pieza
+  tick(): void {
+    if (this._gameOver) return;
+
+    this._clock.tick();
+    if (this._piezaActual) {
+      this.clearPieceFromBoard(this._piezaActual);
+      this._piezaActual.moverAbajo();
+
+      if (!this.canPlace(this._piezaActual)) {
+        this._piezaActual.posY -= 1; // revertimos
+        this.handleLock();
+      } else {
+        this.placePieceOnBoard(this._piezaActual);
+      }
     }
   }
-}
 
-  private clearPieceFromBoard(pieza: _PiezaBase): void {
-    pieza.forma.forEach((fila, y) => {
-      fila.forEach((valor, x) => {
-        if (valor !== 1) return;
-
-        const celda = this._board.obtenerCelda(pieza.posX + x, pieza.posY + y);
-        if (celda) {
-          celda.ocupado = false;
-        }
-      });
-    });
-  }
-
-  private placePieceOnBoard(pieza: _PiezaBase): void {
-    pieza.forma.forEach((fila, y) => {
-      fila.forEach((valor, x) => {
-        if (valor !== 1) return;
-
-        const celda = this._board.obtenerCelda(pieza.posX + x, pieza.posY + y);
-        if (celda) {
-          celda.ocupar();
-        }
-      });
-    });
-  }
-
-  // Movimiento lateral (izquierda/derecha)
+  // Movimiento lateral
   moveLeft(): void {
-    if (!this._piezaActual) return; 
+    if (!this._piezaActual) return;
+    this.clearPieceFromBoard(this._piezaActual);
+
     this._piezaActual.moverIzquierda();
-    !this.canPlace(this._piezaActual) && this._piezaActual.moverDerecha();
+    if (!this.canPlace(this._piezaActual)) {
+      this._piezaActual.moverDerecha();
+    }
+
+    this.placePieceOnBoard(this._piezaActual);
   }
 
   moveRight(): void {
-    if (!this._piezaActual) return; 
+    if (!this._piezaActual) return;
+    this.clearPieceFromBoard(this._piezaActual);
+
     this._piezaActual.moverDerecha();
-    !this.canPlace(this._piezaActual) && this._piezaActual.moverIzquierda(); 
+    if (!this.canPlace(this._piezaActual)) {
+      this._piezaActual.moverIzquierda();
+    }
+
+    this.placePieceOnBoard(this._piezaActual);
   }
 
   // Rotación
   rotate(): void {
-    if (!this._piezaActual) return; 
+    if (!this._piezaActual) return;
+    this.clearPieceFromBoard(this._piezaActual);
+
     const oldForma = this._piezaActual.forma;
     this._piezaActual.rotate();
-    !this.canPlace(this._piezaActual) && (this._piezaActual.forma = oldForma);
+
+    if (!this.canPlace(this._piezaActual)) {
+      this._piezaActual.forma = oldForma;
+    }
+
+    this.placePieceOnBoard(this._piezaActual);
   }
 
   // Bloquear pieza en el tablero
   private lockPiece(): void {
     if (!this._piezaActual) return;
-
-    this._piezaActual.forma.forEach((fila, y) =>
-      fila.forEach((valor, x) => {
-        if (valor !== 1) return;
-
-        const celda = this._board.obtenerCelda(this._piezaActual!.posX + x, this._piezaActual!.posY + y);
-        if (celda) celda.ocupar();
-      })
-    );
-
+    this.placePieceOnBoard(this._piezaActual);
     this._piezaActual = null;
   }
 
-  // Manejo completo cuando la pieza no puede bajar
   private handleLock(): void {
-    this._piezaActual!.posY -= 1; // revertimos movimiento
     this.lockPiece();
     this.clearLines();
     this.checkGameOver();
-    !this._gameOver && this.spawnPiece(); // si no terminó, generamos otra
+    if (!this._gameOver) this.spawnPiece();
   }
 
-  // Eliminar líneas completas
   private clearLines(): void {
     const nuevasFilas = this._board.celdas.filter(fila => !fila.every(c => c.ocupado));
     const eliminadas = this._board.largo - nuevasFilas.length;
@@ -162,24 +132,44 @@ tick(): void {
     this._board.celdas.splice(0, this._board.largo, ...nuevasFilas);
   }
 
-  // Verificar fin del juego
   private checkGameOver(): void {
-    if (this._completedLines >= this._maxLines) this._gameOver = true; 
+    if (this._completedLines >= this._maxLines) this._gameOver = true;
   }
 
-  // Validar si la pieza cabe en el tablero
   private canPlace(pieza: _PiezaBase): boolean {
     return pieza.forma.every((fila, y) =>
       fila.every((valor, x) =>
-        valor === 0 || (
+        valor === 0 ||
+        (
           pieza.posX + x >= 0 &&
           pieza.posX + x < this._board.ancho &&
           pieza.posY + y >= 0 &&
           pieza.posY + y < this._board.largo &&
-          this._board.obtenerCelda(pieza.posX + x, pieza.posY + y) !== undefined &&
           !this._board.obtenerCelda(pieza.posX + x, pieza.posY + y)!.ocupado
         )
       )
     );
+  }
+
+  private placePieceOnBoard(pieza: _PiezaBase): void {
+    pieza.forma.forEach((fila, y) => {
+      fila.forEach((valor, x) => {
+        if (valor === 1) {
+          const celda = this._board.obtenerCelda(pieza.posX + x, pieza.posY + y);
+          if (celda) celda.ocupar();
+        }
+      });
+    });
+  }
+
+  private clearPieceFromBoard(pieza: _PiezaBase): void {
+    pieza.forma.forEach((fila, y) => {
+      fila.forEach((valor, x) => {
+        if (valor === 1) {
+          const celda = this._board.obtenerCelda(pieza.posX + x, pieza.posY + y);
+          if (celda) celda.ocupado = false;
+        }
+      });
+    });
   }
 }
