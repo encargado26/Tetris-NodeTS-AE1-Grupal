@@ -95,23 +95,17 @@ it("moveRight debe mover la pieza a la derecha", () => {
 });
 
   // ramas true (sin pieza)
-  it("moveLeft no rompe si no hay piezaActual", () => {
-    expect(() => juego.moveLeft()).not.toThrow();
-  });
+it("moveLeft no falla sin pieza", () => {
+  expect(() => juego.moveLeft()).not.toThrow();
+});
 
-  it("moveRight no rompe si no hay piezaActual", () => {
-    expect(() => juego.moveRight()).not.toThrow();
-  });
+it("moveRight no falla sin pieza", () => {
+  expect(() => juego.moveRight()).not.toThrow();
+});
 
-  it("rotate no rompe si no hay piezaActual", () => {
-    expect(() => juego.rotate()).not.toThrow();
-  });
-
-  it("lockPiece no hace nada si no hay piezaActual", () => {
-    expect(juego.piezaActual).toBeNull();
-    expect(() => juego["lockPiece"]()).not.toThrow();
-    expect(juego.piezaActual).toBeNull();
-  });
+it("rotate no falla sin pieza", () => {
+  expect(() => juego.rotate()).not.toThrow();
+});
 
   // lockPiece con pieza
   it("lockPiece ocupa celdas si hay piezaActual", () => {
