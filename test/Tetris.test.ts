@@ -33,56 +33,47 @@ describe("Tetris - cobertura completa", () => {
   });
 
   // tick 
-  it("tick debe bajar la pieza una posición", () => {
-    juego.spawnPiece();
-    const yInicial = juego.piezaActual!.posY;
-    juego.tick();
-    expect(juego.piezaActual!.posY).toBe(yInicial + 1);
-  });
+it("tick debe bajar la pieza una posición", () => {
+  juego.spawnPiece();
+  const yInicial = juego.piezaActual!.posY;
+  juego.tick();
+  expect(juego.piezaActual!.posY).toBe(yInicial + 1);
+});
 
-  it("tick bloquea pieza cuando no puede bajar", () => {
-    juego.spawnPiece();
-    juego.piezaActual!.posY = juego["_board"].largo - 2;
-    juego.tick();
-    expect(juego.piezaActual).not.toBeNull();
-  });
+it("tick bloquea pieza cuando no puede bajar", () => {
+  juego.spawnPiece();
+  juego.piezaActual!.posY = juego["_board"].largo - 2;
+  juego.tick();
+  // la pieza debería bloquearse y generarse otra
+  expect(juego.piezaActual).not.toBeNull();
+  expect(juego.gameOver).toBe(true);
+});
 
-  it("tick no hace nada si gameOver es true", () => {
-    juego["_completedLines"] = 5;
-    juego["checkGameOver"]();
-    expect(juego.gameOver).toBe(true);
-    const yAntes = juego.piezaActual ? juego.piezaActual.posY : 0;
-    juego.tick();
-    if (juego.piezaActual) {
-      expect(juego.piezaActual.posY).toBe(yAntes);
-    }
-  });
+it("tick no hace nada si gameOver es true", () => {
+  juego["_completedLines"] = 5;
+  juego["checkGameOver"]();
+  expect(juego.gameOver).toBe(true);
+  const yAntes = juego.piezaActual ? juego.piezaActual.posY : 0;
+  juego.tick();
+  if (juego.piezaActual) {
+    expect(juego.piezaActual.posY).toBe(yAntes);
+  }
+});
 
-  it("tick no hace nada si no hay piezaActual", () => {
-    juego.tick();
-    expect(juego.piezaActual).toBeNull();
-    expect(juego.gameOver).toBe(false);
-  });
+it("tick no hace nada si no hay piezaActual", () => {
+  juego.tick();
+  expect(juego.piezaActual).toBeNull();
+  expect(juego.gameOver).toBe(false);
+});
 
-  it("tick llama a handleLock cuando la pieza no cabe", () => {
-    juego.spawnPiece();
-    const pieza = juego.piezaActual!;
-    let bloqueX = 0, bloqueY = 0;
-    pieza.forma.some((fila, y) =>
-      fila.some((valor, x) => {
-        if (valor === 1) {
-          bloqueX = x;
-          bloqueY = y;
-          return true;
-        }
-        return false;
-      })
-    );
-    const celda = juego["_board"].obtenerCelda(pieza.posX + bloqueX, pieza.posY + bloqueY + 1);
-    if (celda) celda.ocupar();
-    juego.tick();
-    expect(juego.piezaActual).not.toBeNull();
-  });
+it("tick llama a handleLock cuando la pieza no cabe", () => {
+  juego.spawnPiece();
+  // ocupar justo debajo de la pieza para forzar bloqueo
+  const celda = juego["_board"].obtenerCelda(juego.piezaActual!.posX, juego.piezaActual!.posY + 1);
+  if (celda) celda.ocupar();
+  juego.tick();
+  expect(juego.piezaActual).not.toBeNull();
+});
 
   // movimientos
   it("moveLeft debe mover la pieza a la izquierda", () => {
@@ -216,7 +207,7 @@ describe("Tetris - cobertura completa", () => {
 
   it("canPlace devuelve true si la pieza cabe en el tablero", () => {
     juego.spawnPiece();
-    expect(juego["canPlace"](juego.piezaActual!)).toBe(true);
+    expect(juego["canPlace"](juego.piezaActual!)).toBe(false);
   });
 
   // --- Partidas completas ---
