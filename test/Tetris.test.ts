@@ -9,20 +9,26 @@ describe("Tetris - cobertura completa", () => {
     juego = new Tetris(10, 20, 5);
   });
 
+  it("debería crear un tablero con dimensiones correctas", () => {
+    expect(juego["_board"].ancho).toBe(10);
+    expect(juego["_board"].largo).toBe(20);
+  });
+
   // spawnPiece 
   it("spawnPiece debe crear una pieza en la primera fila", () => {
     juego.spawnPiece();
     expect(juego.piezaActual).not.toBeNull();
     expect(juego.piezaActual!.posY).toBe(0);
+    const algunaOcupada = juego["_board"].celdas.some(fila => fila.some(c => c.ocupado));
+    expect(algunaOcupada).toBe(false);
   });
 
-  it("spawnPiece termina el juego si la primera fila está ocupada", () => {
-    juego["_board"].celdas[0] = Array.from({ length: juego["_board"].ancho }, () => {
-      const celda = new _Cell();
-      celda.ocupar();
-      return celda;
-    });
+  it("spawnPiece debería terminar el juego si la primera fila está ocupada", () => {
+    // ocupar todas las celdas de la primera fila
+    juego["_board"].celdas[0].forEach(celda => celda.ocupar());
+
     juego.spawnPiece();
+
     expect(juego.gameOver).toBe(true);
   });
 
