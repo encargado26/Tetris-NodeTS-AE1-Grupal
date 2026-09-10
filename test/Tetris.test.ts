@@ -291,5 +291,5 @@ it("simula partida ganada y partida perdida con piezas aleatorias", () => {
     
     // debería terminar en derrota
     expect(juegoPerdido.gameOver).toBe(true);
-  });
+  });  
 });

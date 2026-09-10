@@ -15,6 +15,7 @@ export class Tetris {
   private _gameOver: boolean;
   private _completedLines: number;
   private _maxLines: number;
+  private _gameWon: boolean;
 
   constructor(ancho: number = 10, largo: number = 20, maxLines: number = 5) {
     this._board = new _Board(ancho, largo);
@@ -23,6 +24,7 @@ export class Tetris {
     this._gameOver = false;
     this._completedLines = 0;
     this._maxLines = maxLines;
+    this._gameWon = false;
   }
 
   get gameOver(): boolean {
@@ -33,6 +35,10 @@ export class Tetris {
     return this._piezaActual;
   }
 
+  get gameWon(): boolean {
+  return this._gameWon;
+}
+
   // Crear nueva pieza aleatoria en la primera fila
   spawnPiece(): void {
     const piezas = [_PiezaT, _PiezaL, _PiezaCuadrado, _PiezaStick, _PiezaDog];
@@ -42,6 +48,7 @@ export class Tetris {
 
     if (!this.canPlace(this._piezaActual)) {
       this._gameOver = true;
+      this._gameWon = false;
       return;
     }
 
