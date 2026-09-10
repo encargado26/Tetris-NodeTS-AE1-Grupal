@@ -246,4 +246,27 @@ it("simula una partida perdida cuando no se puede colocar una nueva pieza", () =
 
   expect(juego.gameOver).toBe(true);
 });
+
+ it("simula partida ganada y partida perdida con piezas aleatorias", () => {
+    // --- Partida ganada ---
+    const juegoGanado = new Tetris(10, 20, 5);
+
+    let lineasCompletadas = 0;
+
+    // insertar piezas una por una hasta completar maxLines
+    for (let i = 0; i < juegoGanado["_maxLines"]; i++) {
+      juegoGanado.spawnPiece();// aparece pieza aleatoria
+      while (juegoGanado.piezaActual && juegoGanado.piezaActual.posY < juegoGanado["_board"].largo - 2) {
+        juegoGanado.tick();// la pieza va cayendo con el reloj
+      }
+      juegoGanado.rotate();// rotamos la pieza en algún momento
+      juegoGanado["handleLock"]();// bloqueamos la pieza
+      juegoGanado["clearLines"]();// limpiamos líneas
+      lineasCompletadas = juegoGanado["_completedLines"];
+    }
+
+    juegoGanado["checkGameOver"]();
+    expect(juegoGanado.gameOver).toBe(true);
+    expect(lineasCompletadas).toBeGreaterThanOrEqual(juegoGanado["_maxLines"]);
+  });
 });
