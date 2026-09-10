@@ -140,7 +140,10 @@ export class Tetris {
   }
 
   private checkGameOver(): void {
-    if (this._completedLines >= this._maxLines) this._gameOver = true;
+      if (this._completedLines >= this._maxLines) {
+    this._gameOver = true;
+    this._gameWon = true;
+  }
   }
 
   private canPlace(pieza: _PiezaBase): boolean {
