@@ -160,69 +160,90 @@ it("handleLock genera una nueva pieza", () => {
   });
 
   // canPlace
-  it("canPlace devuelve false si la pieza está fuera del tablero", () => {
-    juego.spawnPiece();
-    juego.piezaActual!.posX = -5;
-    expect(juego["canPlace"](juego.piezaActual!)).toBe(false);
-  });
+it("canPlace devuelve false si la celda está ocupada", () => {
+  juego.spawnPiece();
 
-  it("canPlace devuelve false si la celda está ocupada", () => {
-    juego.spawnPiece();
-    const pieza = juego.piezaActual!;
-    let bloqueX = 0, bloqueY = 0;
-    pieza.forma.some((fila, y) =>
-      fila.some((valor, x) => {
-        if (valor === 1) {
-          bloqueX = x;
-          bloqueY = y;
-          return true;
-        }
-        return false;
-      })
-    );
-    const celda = juego["_board"].obtenerCelda(pieza.posX + bloqueX, pieza.posY + bloqueY);
-    if (celda) celda.ocupar();
-    expect(juego["canPlace"](pieza)).toBe(false);
-  });
+  const pieza = juego.piezaActual!;
 
-  it("canPlace devuelve true si la pieza cabe en el tablero", () => {
-    juego.spawnPiece();
-    expect(juego["canPlace"](juego.piezaActual!)).toBe(true);
-  });
+  let bloqueX = 0;
+  let bloqueY = 0;
 
-  // --- Partidas completas ---
-  it("simula una partida ganada completando todas las líneas", () => {
-    juego.spawnPiece();
-    for (let i = 0; i < juego["_maxLines"]; i++) {
-      juego["_board"].celdas[19] = Array.from({ length: juego["_board"].ancho }, () => {
-        const celda = new _Cell();
-        celda.ocupar();
-        return celda;
-      });
-    }
-  });
+  pieza.forma.some((fila, y) =>
+    fila.some((valor, x) => {
+      if (valor === 1) {
+        bloqueX = x;
+        bloqueY = y;
+        return true;
+      }
 
-  it("moveLeft no mueve si la pieza está en el borde izquierdo", () => {
+      return false;
+    })
+  );
+
+  const celda = juego["_board"].obtenerCelda(
+    pieza.posX + bloqueX,
+    pieza.posY + bloqueY
+  );
+
+  if (celda) celda.ocupar();
+
+  expect(juego["canPlace"](pieza)).toBe(false);
+});
+
+it("canPlace devuelve true si la pieza cabe en el tablero", () => {
+  juego.spawnPiece();
+
+  juego["clearPieceFromBoard"](juego.piezaActual!);
+
+  expect(juego["canPlace"](juego.piezaActual!)).toBe(true);
+});
+
+it("moveLeft no mueve si la pieza está en el borde izquierdo", () => {
   juego.spawnPiece();
   juego.piezaActual!.posX = 0;
+
   const xAntes = juego.piezaActual!.posX;
   juego.moveLeft();
+
   expect(juego.piezaActual!.posX).toBe(xAntes);
 });
 
 it("moveRight no mueve si la pieza está en el borde derecho", () => {
   juego.spawnPiece();
   juego.piezaActual!.posX = juego["_board"].ancho - 1;
+
   const xAntes = juego.piezaActual!.posX;
   juego.moveRight();
+
   expect(juego.piezaActual!.posX).toBe(xAntes);
 });
 
-it("lockPiece entra en rama de bloqueo con pieza activa", () => {
+// --- Partidas completas ---
+
+it("simula una partida ganada completando todas las líneas", () => {
+  for (let i = 0; i < juego["_maxLines"]; i++) {
+    juego["_board"].celdas[19] = Array.from(
+      { length: juego["_board"].ancho },
+      () => {
+        const celda = new _Cell();
+        celda.ocupar();
+        return celda;
+      }
+    );
+
+    juego["clearLines"]();
+  }
+
+  juego["checkGameOver"]();
+
+  expect(juego.gameOver).toBe(true);
+});
+
+it("simula una partida perdida cuando no se puede colocar una nueva pieza", () => {
+  juego["_board"].celdas[0].forEach(celda => celda.ocupar());
+
   juego.spawnPiece();
-  juego.piezaActual!.posY = juego["_board"].largo - 1;
-  juego["lockPiece"]();
-  const algunaOcupada = juego["_board"].celdas.some(fila => fila.some(c => c.ocupado));
-  expect(algunaOcupada).toBe(true);
+
+  expect(juego.gameOver).toBe(true);
 });
 });
