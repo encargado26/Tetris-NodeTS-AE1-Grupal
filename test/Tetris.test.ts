@@ -247,8 +247,10 @@ it("simula una partida perdida cuando no se puede colocar una nueva pieza", () =
   expect(juego.gameOver).toBe(true);
 });
 
+// Partida ganada 
+
 it("simula partida ganada y partida perdida con piezas aleatorias", () => {
-  // --- Partida ganada ---
+ 
   const juegoGanado = new Tetris(10, 20, 5);
 
   let lineasCompletadas = 0;
@@ -272,4 +274,22 @@ it("simula partida ganada y partida perdida con piezas aleatorias", () => {
   expect(lineasCompletadas).toBeGreaterThanOrEqual(juegoGanado["_maxLines"]);
 });
 
+// Partida perdida
+
+  it("simula una partida perdida cuando no se puede colocar una nueva pieza", () => {
+    const juegoPerdido = new Tetris(10, 20, 5);
+
+    // ocupar la primera fila celda por celda (pieza por pieza)
+    for (let x = 0; x < juegoPerdido["_board"].ancho; x++) {
+      const celda = new _Cell();
+      celda.ocupar();
+      juegoPerdido["_board"].celdas[0][x] = celda;
+    }
+
+    // intentar colocar nueva pieza
+    juegoPerdido.spawnPiece();
+    
+    // debería terminar en derrota
+    expect(juegoPerdido.gameOver).toBe(true);
+  });
 });
